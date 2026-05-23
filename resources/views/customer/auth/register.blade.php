@@ -31,97 +31,86 @@
                         <span class="font-black">FitZone</span>
                     </a>
 
-                    <div class="mb-8">
-                        <p class="text-sm font-bold uppercase tracking-widest text-red-400">Membership Application</p>
-                        <h2 class="mt-2 text-4xl font-black">Join FitZone</h2>
-                        <p class="mt-2 text-neutral-400">Only the essentials. You can complete your profile later.</p>
-                    </div>
-
-                    <form method="POST" action="{{ route('customer.register') }}" class="rounded-lg border border-white/10 bg-neutral-900 p-6 shadow-2xl shadow-black/40">
+                    <form method="POST" action="{{ route('customer.register') }}">
                         @csrf
 
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <label class="md:col-span-2">
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Full name</span>
-                                <input name="full_name" value="{{ old('full_name') }}" placeholder="Juan Dela Cruz" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-red-500 focus:ring-red-500">
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Phone number</span>
-                                <input name="phone" value="{{ old('phone') }}" placeholder="09XXXXXXXXX" maxlength="11" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-red-500 focus:ring-red-500">
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Email address</span>
-                                <input type="email" name="email" value="{{ old('email') }}" placeholder="you@example.com" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-red-500 focus:ring-red-500">
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Branch</span>
-                                <select name="branch_id" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white focus:border-red-500 focus:ring-red-500">
-                                    <option value="">Choose branch</option>
-                                    @foreach ($branches as $branch)
-                                        <option value="{{ $branch->id }}" @selected(old('branch_id') == $branch->id)>
-                                            {{ $branch->name }} - {{ $branch->city }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Membership plan</span>
-                                <select name="membership_plan_id" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white focus:border-red-500 focus:ring-red-500">
-                                    <option value="">Choose plan</option>
-                                    @foreach ($plans as $plan)
-                                        <option value="{{ $plan->id }}" @selected(old('membership_plan_id') == $plan->id)>
-                                            {{ $plan->name }} - PHP {{ number_format($plan->price, 2) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Payment method</span>
-                                <select name="payment_method" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white focus:border-red-500 focus:ring-red-500">
-                                    <option value="">Choose payment</option>
-                                    @foreach (['Cash', 'GCash', 'Credit Card', 'Bank Transfer', 'PayMaya'] as $method)
-                                        <option value="{{ $method }}" @selected(old('payment_method') == $method)>{{ $method }}</option>
-                                    @endforeach
-                                </select>
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Reference number</span>
-                                <input name="reference_no" value="{{ old('reference_no') }}" placeholder="Optional for online payment" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-red-500 focus:ring-red-500">
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Password</span>
-                                <input type="password" name="password" placeholder="At least 8 characters" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-red-500 focus:ring-red-500">
-                            </label>
-
-                            <label>
-                                <span class="mb-2 block text-sm font-semibold text-neutral-300">Confirm password</span>
-                                <input type="password" name="password_confirmation" placeholder="Repeat password" class="w-full rounded border border-white/10 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-red-500 focus:ring-red-500">
-                            </label>
+                        <!-- Full Name -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Full Name</label>
+                            <input type="text" name="full_name" value="{{ old('full_name') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-neutral-900 text-white @error('full_name') border-red-500 @enderror">
+                            @error('full_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
 
-                        @if ($errors->any())
-                            <div class="mt-5 rounded border border-red-500/30 bg-red-950/50 px-4 py-3 text-sm text-red-200">
-                                @foreach ($errors->all() as $error)
-                                    <p>{{ $error }}</p>
-                                @endforeach
-                            </div>
-                        @endif
+                        <!-- Phone -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Phone Number</label>
+                            <input type="text" name="phone" value="{{ old('phone') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-neutral-900 text-white @error('phone') border-red-500 @enderror">
+                            @error('phone')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        </div>
 
-                        <button class="mt-6 w-full rounded bg-red-600 py-3 font-black transition hover:bg-red-700">
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Email Address</label>
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-neutral-900 text-white @error('email') border-red-500 @enderror">
+                            @error('email')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        </div>
+
+                        <!-- Branch Dropdown -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Branch</label>
+                            <select name="branch_id" class="mt-1 block w-full rounded-md bg-neutral-900 text-white @error('branch_id') border-red-500 @enderror">
+                                <option value="">Choose branch</option>
+                                @foreach($branches as $branch)
+                                    <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('branch_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        </div>
+
+                        <!-- Membership Plan Dropdown -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Membership Plan</label>
+                            <select name="membership_plan_id" class="mt-1 block w-full rounded-md bg-neutral-900 text-white @error('membership_plan_id') border-red-500 @enderror">
+                                <option value="">Choose plan</option>
+                                @foreach($plans as $plan)
+                                    <option value="{{ $plan->id }}" {{ old('membership_plan_id') == $plan->id ? 'selected' : '' }}>{{ $plan->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('membership_plan_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Password</label>
+                            <input type="password" name="password"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-neutral-900 text-white @error('password') border-red-500 @enderror">
+                            @error('password')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-300">Confirm Password</label>
+                            <input type="password" name="password_confirmation"
+                                   class="mt-1 block w-full rounded-md border-gray-300 bg-neutral-900 text-white">
+                        </div>
+                        <!-- Payment Method -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-300">Payment Method</label>
+                                <select name="payment_method" class="mt-1 block w-full rounded-md bg-neutral-900 text-white">
+                                    <option value="Cash">Cash</option>
+                                    <option value="GCash">GCash</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="PayMaya">PayMaya</option>
+                                </select>
+                            </div>
+                        <button type="submit"
+                                class="w-full py-3 mt-4 bg-red-600 hover:bg-red-700 rounded font-bold text-white">
                             Create Membership
                         </button>
-
-                        <p class="mt-5 text-center text-sm text-neutral-400">
-                            Already registered?
-                            <a href="{{ route('customer.login') }}" class="font-semibold text-red-300 hover:text-red-200">Login here</a>
-                        </p>
                     </form>
                 </div>
             </section>

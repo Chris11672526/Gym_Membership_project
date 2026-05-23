@@ -2,59 +2,45 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * User model
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Extends Authenticatable so Laravel's Auth system works (login, sessions).
+ * Authenticatable is NOT the same as Eloquent Model for query purposes —
+ * it only provides password hashing, remember tokens, and session binding.
+ *
+ * IMPORTANT: We do NOT define any Eloquent relationships (hasOne, belongsTo etc.)
+ * All data fetching is done via DB::table() in the controllers.
+ */
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-   protected $fillable = [
-    'role_id',
-    'branch_id',
-    'name',
-    'email',
-    'password',
-];
+    protected $fillable = [
+        'role_id',
+        'branch_id',
+        'name',
+        'email',
+        'password',
+    ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
-        public function role()
-    {
-        return $this->belongsTo(\App\Models\Role::class);
-    }
 
-    public function customer()
-    {
-        return $this->hasOne(\App\Models\Customer::class);
-    }
+    // ── NO relationships defined here ──────────────────────────────────────
+    // Do NOT add: role(), customer(), branch() Eloquent relationships.
+    // Use DB::table() joins in controllers instead.
 }
